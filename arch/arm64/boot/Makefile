@@ -18,7 +18,7 @@ include $(srctree)/arch/arm64/boot/dts/Makefile
 
 OBJCOPYFLAGS_Image :=-O binary -R .note -R .note.gnu.build-id -R .comment -S
 
-targets := Image Image.bz2 Image.gz Image.lz4 Image.lzma Image.lzo
+targets := Image Image.bz2 Image.gz dtbo.img Image.lz4 Image.lzma Image.lzo
 
 DTB_NAMES := $(subst $\",,$(CONFIG_BUILD_ARM64_APPENDED_DTB_IMAGE_NAMES))
 ifneq ($(DTB_NAMES),)
@@ -27,6 +27,20 @@ else
 DTB_LIST := $(dtb-y)
 endif
 DTB_OBJS := $(addprefix $(obj)/dts/,$(DTB_LIST))
+
+DTBO_OBJS := $(shell find $(obj)/dts/ -name \*.dtbo)
+
+# Add RTIC DTB to the DTB list if RTIC MPGen is enabled
+# Note, we keep this for compatibility with
+# BUILD_ARM64_APPENDED_DTB_IMAGE targets.
+# The rtic_mp.dts would be generated with the vmlinux if
+# MPGen enabled (RTIC_MPGEN defined).
+ifdef RTIC_MPGEN
+DTB_OBJS += rtic_mp.dtb
+endif
+
+rtic_mp.dtb: vmlinux FORCE
+	$(DTC) -O dtb -o rtic_mp.dtb -b 0 $(DTC_FLAGS) rtic_mp.dts
 
 $(obj)/Image: vmlinux $(obj)/mtk.dtb FORCE
 	$(call if_changed,objcopy)
@@ -54,6 +68,9 @@ $(obj)/Image.gz-dtb: $(obj)/Image.gz $(DTB_OBJS) FORCE
 
 $(obj)/mtk.dtb: $(DTB_OBJS) FORCE
 	$(call if_changed,cat)
+
+$(obj)/dtbo.img: $(DTBO_OBJS) FORCE
+	$(call if_changed,mkdtimg)
 
 install:
 	$(CONFIG_SHELL) $(srctree)/$(src)/install.sh $(KERNELRELEASE) \
