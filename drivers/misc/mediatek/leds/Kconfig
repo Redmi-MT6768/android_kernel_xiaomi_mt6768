@@ -40,6 +40,7 @@ config BACKLIGHT_SUPPORT_LM3697
 config LM3697_SUPPORT
     tristate "TI LM3697"
     default n
+	select BACKLIGHT_LCD_SUPPORT
 	select BACKLIGHT_CLASS_DEVICE
     help
       Say y here to support TI backlight IC LM3697.

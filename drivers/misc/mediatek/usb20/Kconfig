@@ -38,7 +38,6 @@ config MTK_MUSB_DRV_36BIT
 
 config MTK_REVERSE_CHG_ENABLE
 	bool "MTK_REVERSE_CHG_ENABLE"
-	prompt "reverse support"
 	default n
 	help
 	  reverse charger enable if Y . IF unuser Say N.
