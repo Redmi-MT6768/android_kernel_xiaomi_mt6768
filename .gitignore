@@ -19,7 +19,7 @@
 *.elf
 *.gcno
 *.gz
-*.i
+#*.i
 *.ko
 *.ll
 *.lst
