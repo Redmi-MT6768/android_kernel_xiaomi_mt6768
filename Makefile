@@ -1135,6 +1135,7 @@ $(sort $(vmlinux-deps)): $(vmlinux-dirs) ;
 PHONY += $(vmlinux-dirs)
 $(vmlinux-dirs): prepare scripts
 	$(Q)$(MAKE) $(build)=$@
+KBUILD_CFLAGS += $(call cc-disable-warning, fortify-source)
 
 define filechk_kernel.release
 	echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
