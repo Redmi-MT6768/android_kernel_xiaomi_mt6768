@@ -462,7 +462,7 @@ static int wmt_step_parse_act_id(char *str)
 {
 	int str_to_int = STEP_ACTION_INDEX_NO_DEFINE;
 
-	if (str == NULL || str == '\0')
+	if (str == NULL || *str == '\0')
 		return STEP_ACTION_INDEX_NO_DEFINE;
 
 	str_to_int = wmt_step_get_int_from_four_char(str);
