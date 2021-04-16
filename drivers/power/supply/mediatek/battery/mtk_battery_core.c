@@ -37,7 +37,6 @@
 #include <linux/module.h>	/* For MODULE_ marcros  */
 #include <linux/wait.h>		/* For wait queue*/
 #include <linux/sched.h>	/* For wait queue*/
-#include <linux/kthread.h>	/* For Kthread_run */
 #include <linux/platform_device.h>	/* platform device */
 #include <linux/time.h>
 
@@ -2404,36 +2403,6 @@ void fg_drv_update_hw_status(void)
 
 }
 
-
-int battery_update_routine(void *x)
-{
-	battery_update_psd(&battery_main);
-	while (1) {
-		wait_event(gm.wait_que,
-			(gm.fg_update_flag > 0)
-			|| (gm.tracking_cb_flag > 0)
-			|| (gm.onepercent_cb_flag > 0));
-		if (gm.fg_update_flag > 0) {
-			gm.fg_update_flag = 0;
-			fg_drv_update_hw_status();
-		}
-		if (gm.tracking_cb_flag > 0) {
-			bm_err("%s wake by tracking_cb_flag:%d\n",
-				__func__, gm.tracking_cb_flag);
-			gm.tracking_cb_flag = 0;
-			wakeup_fg_algo(FG_INTR_FG_TIME);
-		}
-		if (gm.onepercent_cb_flag > 0) {
-			bm_err("%s wake by onepercent_cb_flag:%d\n",
-				__func__, gm.onepercent_cb_flag);
-			gm.onepercent_cb_flag = 0;
-			wakeup_fg_algo_cmd(FG_INTR_FG_TIME, 0, 1);
-		}
-		if (gm.fix_coverity == 1)
-			return 0;
-	}
-}
-
 void fg_update_routine_wakeup(void)
 {
 	gm.fg_update_flag = 1;
@@ -4172,7 +4141,6 @@ void mtk_battery_init(struct platform_device *dev)
 	gauge_coulomb_consumer_init(&gm.soc_minus, &dev->dev, "soc-1%");
 	gm.soc_minus.callback = fg_bat_int2_l_handler;
 
-	kthread_run(battery_update_routine, NULL, "battery_thread");
 	fg_drv_thread_hrtimer_init();
 
 	alarm_init(&gm.tracking_timer, ALARM_BOOTTIME,
