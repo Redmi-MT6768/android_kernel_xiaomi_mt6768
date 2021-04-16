@@ -947,16 +947,13 @@ endif
 
 # =============PROJECT==================================
 # Add macros by TARGET_PRODUCT for different projects
-ifeq ($(strip $(TARGET_PRODUCT)) , lancelot)
+ifeq ($(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON),y)
 # Define macros here only for lancelot project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_LANCELOT
-else ifeq ($(strip $(TARGET_PRODUCT)) , shiva)
+else ifeq ($(CONFIG_TARGET_PRODUCT_SHIVACOMMON),y)
 # Define macros here only for shiva project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_SHIVA
-else
-endif
-
-ifneq (,$(filter merlin merlinin merlinnfc, $(TARGET_PRODUCT)))
+else ifeq ($(CONFIG_TARGET_PRODUCT_MERLINCOMMON),y)
 # Define macros here only for merlin common project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_MERLINCOMMON
 endif
