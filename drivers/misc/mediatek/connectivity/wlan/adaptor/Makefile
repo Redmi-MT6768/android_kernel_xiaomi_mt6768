@@ -1,5 +1,4 @@
 ###############################################################################
-# Necessary Check
 
 ifneq ($(KERNEL_OUT),)
     ccflags-y += -imacros $(KERNEL_OUT)/include/generated/autoconf.h

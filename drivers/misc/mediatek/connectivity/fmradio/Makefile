@@ -12,14 +12,6 @@
 #
 
 ###############################################################################
-# Necessary Check
-
-ifeq ($(AUTOCONF_H),)
-    $(error AUTOCONF_H is not defined)
-endif
-
-ccflags-y += -imacros $(AUTOCONF_H)
-
 ifndef TOP
     TOP := $(srctree)/..
 endif

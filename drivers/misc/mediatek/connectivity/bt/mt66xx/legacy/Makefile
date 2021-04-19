@@ -3,15 +3,6 @@ MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 # Bluetooth character device driver
 
 ###############################################################################
-# Necessary Check
-
-ifneq ($(KERNEL_OUT),)
-    ccflags-y += -imacros $(KERNEL_OUT)/include/generated/autoconf.h
-endif
-
-ifndef TOP
-    TOP := $(srctree)/..
-endif
 
 ifneq ($(CFG_BT_PM_QOS_CONTROL),)
     $(warning set PM_QOS_CONTROL=1)

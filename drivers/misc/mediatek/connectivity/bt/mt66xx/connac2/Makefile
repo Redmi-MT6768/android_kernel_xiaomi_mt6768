@@ -5,10 +5,6 @@ MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 ###############################################################################
 # Necessary Check
 
-ifneq ($(KERNEL_OUT),)
-    ccflags-y += -imacros $(KERNEL_OUT)/include/generated/autoconf.h
-endif
-
 $(warning connac20 bt driver: _MTK_BT_CHIP = $(_MTK_BT_CHIP))
 CONNAC20_CHIPID=$(subst MTK_CONSYS_MT,,$(_MTK_BT_CHIP))
 ccflags-y += -D CONNAC20_CHIPID=$(CONNAC20_CHIPID)
