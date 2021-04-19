@@ -2,13 +2,6 @@
 # Bluetooth character device driver
 
 ###############################################################################
-# Necessary Check
-
-ifeq ($(AUTOCONF_H),)
-    $(error AUTOCONF_H is not defined)
-endif
-
-ccflags-y += -imacros $(AUTOCONF_H)
 
 MODULE_NAME := btmtksdio
 obj-m += $(MODULE_NAME).o
