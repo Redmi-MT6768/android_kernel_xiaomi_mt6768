@@ -45,7 +45,7 @@ endif
         # for gen4m options
         export CONFIG_MTK_COMBO_WIFI_HIF=axi
         export MTK_COMBO_CHIP=CONNAC
-        export WLAN_CHIP_ID=6765
+        export WLAN_CHIP_ID=6768
         export MTK_ANDROID_WMT=y
 
         # Do build-in for xxx.c checking
