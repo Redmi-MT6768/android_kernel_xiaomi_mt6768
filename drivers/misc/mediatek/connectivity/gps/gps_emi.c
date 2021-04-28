@@ -447,9 +447,9 @@ static struct platform_driver gps_emi_driver = {
 /*****************************************************************************/
 static int __init gps_emi_mod_init(void)
 {
-	GPS_ERR("gps emi mod register begin");
 	int ret = 0;
 	int err = 0;
+	GPS_ERR("gps emi mod register begin");
 
 	sema_init(&fw_dl_mtx, 1);
 
