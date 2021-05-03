@@ -51,7 +51,7 @@ ccflags-y += -I$(srctree)/drivers/devfreq
 ###############################################################################
 
 MODULE_NAME := gps_drv
-obj-m += $(MODULE_NAME).o
+obj-y += $(MODULE_NAME).o
 
 WMT_SRC_FOLDER := $(srctree)/drivers/misc/mediatek/connectivity/common
 
