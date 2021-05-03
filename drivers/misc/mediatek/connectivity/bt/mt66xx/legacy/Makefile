@@ -2,6 +2,8 @@
 # Bluetooth character device driver
 
 ###############################################################################
+ccflags-y += -Wno-unused-variable
+
 # Force build fail on modpost warning
 KBUILD_MODPOST_FAIL_ON_WARNINGS := y
 ###############################################################################
@@ -36,6 +38,7 @@ obj-y += $(MODULE_NAME).o
 ccflags-y += -D CREATE_NODE_DYNAMIC=1
 
 $(MODULE_NAME)-objs += stp_chrdev_bt.o
+$(MODULE_NAME)-objs += dbg_bt.o
 ifneq ($(CONFIG_MTK_CONNSYS_DEDICATED_LOG_PATH),)
 $(MODULE_NAME)-objs += fw_log_bt.o
 endif
