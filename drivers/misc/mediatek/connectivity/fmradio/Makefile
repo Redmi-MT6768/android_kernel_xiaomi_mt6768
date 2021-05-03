@@ -52,7 +52,7 @@ ifneq ($(CFG_FM_CHIP_ID),)
 endif
 
     MODULE_NAME := fmradio_drv
-    obj-m += $(MODULE_NAME).o
+    obj-y += $(MODULE_NAME).o
 
     FM_CHIP_MACRO := $(subst ",,$(CONFIG_MTK_FM_CHIP))
     FM_CHIP := $(subst _FM,,$(subst MT,mt,$(subst ",,$(CONFIG_MTK_FM_CHIP))))
