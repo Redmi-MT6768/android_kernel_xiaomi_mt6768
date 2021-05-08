@@ -47,6 +47,8 @@ endif
         export MTK_COMBO_CHIP=CONNAC
         export WLAN_CHIP_ID=6768
         export MTK_ANDROID_WMT=y
+        export WIFI_IP_SET=1
+        export WIFI_ECO_VER=1
 
         # Do build-in for xxx.c checking
         subdir-ccflags-y += -D MTK_WCN_REMOVE_KERNEL_MODULE
