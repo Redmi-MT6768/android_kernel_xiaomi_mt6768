@@ -49,6 +49,7 @@ endif
         export MTK_ANDROID_WMT=y
         export WIFI_IP_SET=1
         export WIFI_ECO_VER=1
+        export ADAPTOR_OPTS=$(MTK_COMBO_CHIP)
 
         # Do build-in for xxx.c checking
         subdir-ccflags-y += -D MTK_WCN_REMOVE_KERNEL_MODULE
