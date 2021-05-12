@@ -75,6 +75,11 @@ int do_wlan_drv_init(int chip_id)
 		WMT_DETECT_PR_INFO("WLAN-GEN3 driver init, ret:%d\n", ret);
 		break;
 
+	case 0x6768:
+		ret = mtk_wcn_wlan_gen4_init();
+		WMT_DETECT_PR_INFO("WLAN-GEN4 driver init, ret:%d\n", ret);
+		break;
+
 	default:
 		/* WLAN driver init */
 		ret = mtk_wcn_wlan_gen2_init();
