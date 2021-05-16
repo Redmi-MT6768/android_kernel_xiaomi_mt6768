@@ -81,19 +81,15 @@
 #ifdef CONFIG_MTK_ENG_BUILD
 #define BINDER_WATCHDOG		"v0.1"
 #endif
-#define BINDER_USER_TRACKING	1
-
-#ifdef BINDER_USER_TRACKING
-#include <linux/rtc.h>
-#include <linux/time.h>
-#endif
 
 #ifdef BINDER_WATCHDOG
 #include <linux/mm.h>
 #include <linux/slab.h>
 #include <linux/types.h>
+#include <linux/time.h>
 #include <linux/delay.h>
 #include <linux/kthread.h>
+#include <linux/rtc.h>
 
 static DEFINE_MUTEX(mtk_binder_main_lock);
 static pid_t system_server_pid;
@@ -303,15 +299,13 @@ struct binder_transaction_log_entry {
 	const char *context_name;
 #ifdef BINDER_WATCHDOG
 	unsigned int code;
+	struct timespec timestamp;
 	char service[MAX_SERVICE_NAME_LEN];
 	int fd;
+	struct timeval tv;
 	struct timespec readstamp;
 	struct timespec endstamp;
 	unsigned int cur;
-#endif
-#ifdef BINDER_USER_TRACKING
-	struct timespec timestamp;
-	struct timeval tv;
 #endif
 };
 #ifdef BINDER_WATCHDOG
@@ -799,11 +793,14 @@ struct binder_transaction {
 	 */
 	spinlock_t lock;
 #ifdef BINDER_WATCHDOG
+	struct timespec timestamp;
 	enum wait_on_reason wait_on;
 	enum wait_on_reason bark_on;
 	struct rb_node rb_node;         /* by bark_time */
 	struct timespec bark_time;
+	struct timespec stuck_time;
 	struct timespec exe_timestamp;
+	struct timeval tv;
 	char service[MAX_SERVICE_NAME_LEN];
 	pid_t fproc;
 	pid_t fthrd;
@@ -811,62 +808,8 @@ struct binder_transaction {
 	pid_t tthrd;
 	unsigned int log_idx;
 #endif
-#ifdef BINDER_USER_TRACKING
-	struct timespec timestamp;
-	struct timeval tv;
-#endif
 
 };
-
-#ifdef BINDER_USER_TRACKING
-#ifndef BINDER_WATCHDOG
-/*
- * binder_print_delay - Output info of a delay transaction
- * @t:          pointer to the over-time transaction
- */
-static void binder_print_delay(struct binder_transaction *t)
-{
-	struct rtc_time tm;
-	struct timespec *startime;
-	struct timespec cur, sub_t;
-
-	ktime_get_ts(&cur);
-	startime = &t->timestamp;
-	sub_t = timespec_sub(cur, *startime);
-
-	/* if transaction time is over than 2 sec,
-	 * show timeout warning log.
-	 */
-	if (sub_t.tv_sec < 2)
-		return;
-
-	rtc_time_to_tm(t->tv.tv_sec, &tm);
-
-	spin_lock(&t->lock);
-	pr_info_ratelimited("%d: from %d:%d to %d:%d",
-			t->debug_id,
-			t->from ? t->from->proc->pid : 0,
-			t->from ? t->from->pid : 0,
-			t->to_proc ? t->to_proc->pid : 0,
-			t->to_thread ? t->to_thread->pid : 0);
-	spin_unlock(&t->lock);
-
-	pr_info_ratelimited(" total %u.%03ld s code %u start %lu.%03ld android %d-%02d-%02d %02d:%02d:%02d.%03lu\n",
-			(unsigned int)sub_t.tv_sec,
-			(sub_t.tv_nsec / NSEC_PER_MSEC),
-			t->code,
-			(unsigned long)startime->tv_sec,
-			(startime->tv_nsec / NSEC_PER_MSEC),
-			(tm.tm_year + 1900), (tm.tm_mon + 1), tm.tm_mday,
-			tm.tm_hour, tm.tm_min, tm.tm_sec,
-			(unsigned long)(t->tv.tv_usec / USEC_PER_MSEC));
-}
-#else
-static void binder_print_delay(struct binder_transaction *t)
-{
-}
-#endif
-#endif
 
 #ifdef BINDER_WATCHDOG
 struct binder_timeout_log {
@@ -2838,10 +2781,7 @@ static void binder_free_transaction(struct binder_transaction *t)
 		binder_inner_proc_unlock(target_proc);
 	}
 #ifdef BINDER_WATCHDOG
-	binder_cancel_bwdog(t);
-#endif
-#ifdef BINDER_USER_TRACKING
-	binder_print_delay(t);
+		binder_cancel_bwdog(t);
 #endif
 	/*
 	 * If the transaction has no target_proc, then
@@ -3747,8 +3687,6 @@ static void binder_transaction(struct binder_proc *proc,
 	e->code = tr->code;
 	/* fd 0 is also valid... set initial value to -1 */
 	e->fd = -1;
-#endif
-#ifdef BINDER_USER_TRACKING
 	ktime_get_ts(&e->timestamp);
 	/* monotonic_to_bootbased(&e->timestamp); */
 
@@ -3934,14 +3872,12 @@ static void binder_transaction(struct binder_proc *proc,
 		return_error_line = __LINE__;
 		goto err_alloc_t_failed;
 	}
-#ifdef BINDER_USER_TRACKING
+#ifdef BINDER_WATCHDOG
 	memcpy(&t->timestamp, &e->timestamp, sizeof(struct timespec));
 	/* do_gettimeofday(&t->tv); */
 	/* consider time zone. translate to android time */
 	/* t->tv.tv_sec -= (sys_tz.tz_minuteswest * 60); */
 	memcpy(&t->tv, &e->tv, sizeof(struct timeval));
-#endif
-#ifdef BINDER_WATCHDOG
 	if (!reply)
 		strncpy(t->service, target_node->name, MAX_SERVICE_NAME_LEN);
 #endif
@@ -4397,9 +4333,6 @@ err_get_secctx_failed:
 err_alloc_tcomplete_failed:
 #ifdef BINDER_WATCHDOG
 	binder_cancel_bwdog(t);
-#endif
-#ifdef BINDER_USER_TRACKING
-	binder_print_delay(t);
 #endif
 	kfree(t);
 	binder_stats_deleted(BINDER_STAT_TRANSACTION);
@@ -6344,11 +6277,6 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
 {
 	struct binder_proc *to_proc;
 	struct binder_buffer *buffer = t->buffer;
-#ifdef BINDER_USER_TRACKING
-	struct rtc_time tm;
-
-	rtc_time_to_tm(t->tv.tv_sec, &tm);
-#endif
 
 	spin_lock(&t->lock);
 	to_proc = t->to_proc;
@@ -6362,15 +6290,6 @@ static void print_binder_transaction_ilocked(struct seq_file *m,
 		   t->code, t->flags, t->priority.sched_policy,
 		   t->priority.prio, t->need_reply);
 	spin_unlock(&t->lock);
-#ifdef BINDER_USER_TRACKING
-	seq_printf(m,
-		   " start %lu.%06lu android %d-%02d-%02d %02d:%02d:%02d.%03lu",
-		   (unsigned long)t->timestamp.tv_sec,
-		   (t->timestamp.tv_nsec / NSEC_PER_USEC),
-		   (tm.tm_year + 1900), (tm.tm_mon + 1), tm.tm_mday,
-		   tm.tm_hour, tm.tm_min, tm.tm_sec,
-		   (unsigned long)(t->tv.tv_usec / USEC_PER_MSEC));
-#endif
 
 	if (proc != to_proc) {
 		/*
