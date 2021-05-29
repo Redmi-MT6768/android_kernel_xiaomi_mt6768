@@ -39,13 +39,8 @@ subdir-ccflags-y += $(CUSTOM_KERNEL_FLAGS)
 
 obj-y += $(subst ",,$(CONFIG_MTK_PLATFORM_SENSOR))/
 
-ifeq ($(TARGET_PRODUCT),$(filter $(TARGET_PRODUCT),merlin merlinin merlinnfc))
+ifeq ($(CONFIG_TARGET_PRODUCT_MERLINCOMMON),y)
 KBUILD_CFLAGS += -DMERLIN_MSM_CAMERA_HW_INFO
-else ifeq ($(TARGET_PRODUCT),$(filter $(TARGET_PRODUCT),lancelot lanclotin lancelotnfc))
+else ifeq ($(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON),y)
 KBUILD_CFLAGS += -DLANCELOT_MSM_CAMERA_HW_INFO
-else ifeq ($(TARGET_PRODUCT),$(filter $(TARGET_PRODUCT),galahad galahadin galahadnfc))
-KBUILD_CFLAGS += -DGALAHAD_MSM_CAMERA_HW_INFO
-else ifeq ($(TARGET_PRODUCT),$(filter $(TARGET_PRODUCT),shiva))
-KBUILD_CFLAGS += -DSHIVA_MSM_CAMERA_HW_INFO
-else
 endif
