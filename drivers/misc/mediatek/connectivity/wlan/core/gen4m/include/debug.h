@@ -318,8 +318,8 @@ enum WAKE_DATA_TYPE {
  * #endif
  */
 #if DBG_DISABLE_ALL_LOG
-#define DBGLOG(_Module, _Class, _Fmt)
-#define DBGLOG_LIMITED(_Module, _Class, _Fmt)
+#define DBGLOG(_Module, _Class, _Fmt, ...)
+#define DBGLOG_LIMITED(_Module, _Class, _Fmt, ...)
 #define DBGLOG_MEM8(_Module, _Class, _StartAddr, _Length)
 #define DBGLOG_MEM32(_Module, _Class, _StartAddr, _Length)
 #else
