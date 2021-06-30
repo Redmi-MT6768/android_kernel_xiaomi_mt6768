@@ -244,7 +244,7 @@ static void set_max_framerate(UINT16 framerate, kal_bool min_framelength_en)
     imgsensor.frame_length = frame_length;
   else
     imgsensor.frame_length = imgsensor.min_frame_length;
-    imgsensor.dummy_line = imgsensor.frame_length - imgsensor.min_frame_length;
+  imgsensor.dummy_line = imgsensor.frame_length - imgsensor.min_frame_length;
     if (imgsensor.frame_length > imgsensor_info.max_frame_length)
     {
         imgsensor.frame_length = imgsensor_info.max_frame_length;
