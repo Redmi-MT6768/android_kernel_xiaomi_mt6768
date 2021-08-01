@@ -1953,6 +1953,6 @@
 
 /* DISPSYS GPIO standardization end*/
 
-#include <lancelot/cust.dtsi>
+#include "mediatek/lancelot/cust.dtsi"
 #include "mediatek/cust_mt6768_lancelot_camera.dtsi"
 /*End of this file, DO NOT ADD ANYTHING HERE*/

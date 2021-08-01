@@ -1410,7 +1410,7 @@
 
 /* DISPSYS GPIO standardization end*/
 
-#include <merlin/cust.dtsi>
+#include "mediatek/merlin/cust.dtsi"
 #include "mediatek/cust_mt6768_camera.dtsi"
 #include "mediatek/cust_mt6768_touch_1080x2160.dtsi"
 /*End of this file, DO NOT ADD ANYTHING HERE*/
