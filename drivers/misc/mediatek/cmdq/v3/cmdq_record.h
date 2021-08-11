@@ -336,7 +336,7 @@ s32 cmdqBackupReadSlotext(cmdqBackupSlotHandle h_backup_slot, u32 slot_index,
 	u32 *value);
 #define cmdqBackupReadSlot(h_backup_slot, slot_index, value)                      \
 do {                                                                                       \
-	 pr_notice("cmdqBackupReadSlot called by %s line no %d\n", __func__, __LINE__);      \
+	 pr_debug("cmdqBackupReadSlot called by %s line no %d\n", __func__, __LINE__);      \
 	 cmdqBackupReadSlotext(h_backup_slot, slot_index, value);                              \
 } while (0)
 /* Use CPU to write value into 32-bit register backup slot by index directly.
@@ -366,7 +366,7 @@ s32 cmdqRecBackupRegisterToSlotext(struct cmdqRecStruct *handle,
 	cmdqBackupSlotHandle h_backup_slot, u32 slot_index, u32 addr);
 #define cmdqRecBackupRegisterToSlot(handle, h_backup_slot, slot_index, addr)                      \
 do {                                                                                       \
-	pr_notice("cmdqRecBackupRegisterToSlot called by %s line no %d\n", __func__, __LINE__);      \
+	pr_debug("cmdqRecBackupRegisterToSlot called by %s line no %d\n", __func__, __LINE__);      \
 	cmdqRecBackupRegisterToSlotext(handle,h_backup_slot, slot_index, addr);                   \
 } while (0)
 /* Insert instructions to write 32-bit HW register
