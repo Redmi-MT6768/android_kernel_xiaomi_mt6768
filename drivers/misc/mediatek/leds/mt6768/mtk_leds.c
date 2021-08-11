@@ -253,14 +253,14 @@ struct cust_mt65xx_led *get_cust_led_dtsi(void)
 			   (long)chargepump_set_backlight_level;
 			LEDS_DEBUG("BL set by chargepump\n");
 #elif defined(CONFIG_KTD3136_SUPPORT) && defined(CONFIG_LM3697_SUPPORT)
-			printk("[%s]: *liuyundong*, bkl_id = %d\n", __func__, bkl_id);
+			LEDS_DEBUG("[%s]: *liuyundong*, bkl_id = %d\n", __func__, bkl_id);
 
 			if (bkl_id == 24) {
 				pled_dtsi[i].data = (long)ktd3137_brightness_set;
-				printk("[%s]: backlight is ktd3136 contrl!\n", __func__);
+				LEDS_DEBUG("[%s]: backlight is ktd3136 contrl!\n", __func__);
 			} else if (bkl_id == 1) {
 				pled_dtsi[i].data = (long)lm3697_set_brightness;
-				printk("[%s]: backlight is lm3697 contrl!\n", __func__);
+				LEDS_DEBUG("[%s]: backlight is lm3697 contrl!\n", __func__);
 			}
 #else
 			pled_dtsi[i].data = (long)mtkfb_set_backlight_level;
@@ -847,7 +847,7 @@ int mt_mt65xx_led_set_cust(struct cust_mt65xx_led *cust, int level)
 	case MT65XX_LED_MODE_CUST_LCM:
 		if (strcmp(cust->name, "lcd-backlight") == 0)
 			bl_brightness_hal = level;
-		printk(KERN_INFO "%s backlight control by LCM\n", __func__);
+		LEDS_DEBUG("%s backlight control by LCM\n", __func__);
 		/* warning for this API revork */
 		return ((cust_brightness_set) (cust->data)) (level, bl_div_hal);
 

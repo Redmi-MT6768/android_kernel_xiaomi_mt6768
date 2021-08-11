@@ -33,6 +33,16 @@
 #define LMU_BACKLIGHT_11BIT_MSB_SHIFT		3
 #define DEFAULT_PWM_NAME			"lmu-backlight"
 
+/****************************************************************************
+ * DEBUG MACROS
+ ***************************************************************************/
+static int debug_enable_led_hal = 1;
+#define LEDS_DEBUG(format, args...) do { \
+	if (debug_enable_led_hal) {	\
+		pr_debug("[LED]"format, ##args);\
+	} \
+} while (0)
+
 static struct ti_lmu_bl_chip *bl_chip;
 
 int translate_value[2048] = {0, 50, 55, 171, 253, 317, 360, 414, 452, 486, 516, 543, 568, 591, 612, 632, 651, 668, 684, 700, 714, 728, 742, 754, 767, 778, 790,\
@@ -139,68 +149,68 @@ static int dump_i2c_reg(struct ti_lmu_bl_chip *chip)
 	int ret_val = 0;
 #if 1
 	regmap_read(regmap, 0x10, &ret_val);
-	pr_err("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1A, &ret_val);
-	pr_err("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1C, &ret_val);
-	pr_err("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x22, &ret_val);
-	pr_err("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x23, &ret_val);
-	pr_err("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x24, &ret_val);
-	pr_err("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x18, &ret_val);
-	pr_err("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x16, &ret_val);
-	pr_err("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
 #else
 	regmap_read(regmap, 0x00, &ret_val);
-	pr_err("[bkl] %s read 0x00 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x00 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x01, &ret_val);
-	pr_err("[bkl] %s read 0x01 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x01 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x10, &ret_val);
-	pr_err("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x11, &ret_val);
-	pr_err("[bkl] %s read 0x11 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x11 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x12, &ret_val);
-	pr_err("[bkl] %s read 0x12 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x12 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x13, &ret_val);
-	pr_err("[bkl] %s read 0x13 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x13 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x14, &ret_val);
-	pr_err("[bkl] %s read 0x14 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x14 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x15, &ret_val);
-	pr_err("[bkl] %s read 0x15 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x15 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x16, &ret_val);
-	pr_err("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x17, &ret_val);
-	pr_err("[bkl] %s read 0x17 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x17 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x18, &ret_val);
-	pr_err("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x19, &ret_val);
-	pr_err("[bkl] %s read 0x19 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x19 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1A, &ret_val);
-	pr_err("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1B, &ret_val);
-	pr_err("[bkl] %s read 0x1B = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1B = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1C, &ret_val);
-	pr_err("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x20, &ret_val);
-	pr_err("[bkl] %s read 0x20 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x20 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x21, &ret_val);
-	pr_err("[bkl] %s read 0x21 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x21 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x22, &ret_val);
-	pr_err("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x23, &ret_val);
-	pr_err("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x24, &ret_val);
-	pr_err("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB0, &ret_val);
-	pr_err("[bkl] %s read 0xB0 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB0 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB2, &ret_val);
-	pr_err("[bkl] %s read 0xB2 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB2 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB4, &ret_val);
-	pr_err("[bkl] %s read 0xB4 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB4 = 0x%x\n", __func__, ret_val);
 #endif
 
 	return 0;
@@ -211,28 +221,28 @@ int ti_hbm_set(enum backlight_hbm_mode hbm_mode)
 	struct regmap *regmap = bl_chip->lmu->regmap;
 	int value = 0;
 
-	pr_err("[bkl] %s enter\n", __func__);
+	LEDS_DEBUG("[bkl] %s enter\n", __func__);
 
 	switch (hbm_mode) {
 	case HBM_MODE_DEFAULT:
 		regmap_write(regmap, 0x18, 0x15);//21.8mA
-		pr_err("This is hbm mode 1\n");
+		LEDS_DEBUG("This is hbm mode 1\n");
 		break;
 	case HBM_MODE_LEVEL1:
 		regmap_write(regmap, 0x18, 0x19);//25mA
-		pr_err("This is hbm mode 2\n");
+		LEDS_DEBUG("This is hbm mode 2\n");
 		break;
 	case HBM_MODE_LEVEL2:
 		regmap_write(regmap, 0x18, 0x1C);//27.4mA
-		pr_err("This is hbm mode 3\n");
+		LEDS_DEBUG("This is hbm mode 3\n");
 		break;
 	default:
-		pr_err("This isn't hbm mode\n");
+		LEDS_DEBUG("This isn't hbm mode\n");
 		break;
 	}
 
 	regmap_read(regmap, 0x18, &value);
-	pr_err("[bkl]%s hbm_mode = %d,regmap value=0x%x\n", __func__, hbm_mode, value);
+	LEDS_DEBUG("[bkl]%s hbm_mode = %d,regmap value=0x%x\n", __func__, hbm_mode, value);
 	return 0;
 }
 
@@ -345,11 +355,11 @@ static int ti_lmu_backlight_update_brightness_register(struct ti_lmu_bl *lmu_bl,
 					 brightness);
 		if (ret)
 			return ret;
-		pr_err("[bkl][after]11bit %s brightness = %d\n", __func__, brightness);
+		LEDS_DEBUG("[bkl][after]11bit %s brightness = %d\n", __func__, brightness);
 		val = (brightness >> LMU_BACKLIGHT_11BIT_MSB_SHIFT) & 0xFF;
 	} else {
 		val = brightness & 0xFF;
-		pr_err("[bkl]8bit %s val = %d\n", __func__, val);
+		LEDS_DEBUG("[bkl]8bit %s val = %d\n", __func__, val);
 	}
 
 	reg = reginfo->brightness_msb[lmu_bl->bank_id];
@@ -366,7 +376,7 @@ static int ti_lmu_backlight_set_brightness(int brightness)
 		ret = ti_lmu_backlight_enable(lmu_bl, 0);
 
 	if (ret) {
-		pr_err("[bkl] %s enable failed ret %d \n", __func__, ret);
+		LEDS_DEBUG("[bkl] %s enable failed ret %d \n", __func__, ret);
 		return ret;
 	}
 
@@ -379,13 +389,13 @@ static int ti_lmu_backlight_set_brightness(int brightness)
 
 int lm3697_set_brightness(int brightness)
 {
-	printk(KERN_INFO "[bkl][before]%s brightness = %d\n", __func__, brightness);
+	LEDS_DEBUG("[bkl][before]%s brightness = %d\n", __func__, brightness);
 	//return ti_lmu_backlight_update_brightness_register(bl_chip->lmu_bl, brightness);
 
 #ifdef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	if ((brightness < 6) && (brightness > 2)) {//HQ-61731
 		brightness = 6;
-		printk("%s: lyd_lowest_brightness, brightness = %d", __func__, brightness);
+		LEDS_DEBUG("%s: lyd_lowest_brightness, brightness = %d", __func__, brightness);
 	}
 #endif
 
@@ -433,7 +443,7 @@ static int of_property_count_elems_of_size(const struct device_node *np,
 		return -ENODATA;
 
 	if (prop->length % elem_size != 0) {
-		pr_err("size of %s in node %s is not a multiple of %d\n",
+		LEDS_DEBUG("size of %s in node %s is not a multiple of %d\n",
 		       propname, np->full_name, elem_size);
 		return -EINVAL;
 	}
@@ -638,7 +648,7 @@ static int ti_lmu_backlight_update_ctrl_mode(struct ti_lmu_bl *lmu_bl)
 	 * Update PWM configuration register.
 	 * If the mode is register based, then clear the bit.
 	 */
-	pr_err("[bkl] %s reg = 0x%x\n", __func__, *reg);
+	LEDS_DEBUG("[bkl] %s reg = 0x%x\n", __func__, *reg);
 	if (lmu_bl->mode == BL_PWM_BASED)
 		val = LMU_BL_GET_VAL(*reg);
 	else
@@ -747,7 +757,7 @@ static int ti_lmu_backlight_init(struct ti_lmu_bl_chip *chip)
 	//u32 *reg = chip->cfg->reginfo->init;
 	//int num_init = chip->cfg->reginfo->num_init;
 	//int i, ret;
-	pr_err("[bkl] %s enter\n", __func__);
+	LEDS_DEBUG("[bkl] %s enter\n", __func__);
 	/*
 	 * 'init' register data consists of address, mask, value.
 	 * Driver can get each data by using LMU_BL_GET_ADDR(),
@@ -762,7 +772,7 @@ static int ti_lmu_backlight_init(struct ti_lmu_bl_chip *chip)
 		ret = regmap_update_bits(regmap, LMU_BL_GET_ADDR(*reg),
 					 LMU_BL_GET_MASK(*reg),
 					 LMU_BL_GET_VAL(*reg));
-		pr_err("%s ADDR = 0x%x, MASK = 0x%x, VAL = 0x%x\n", __func__,
+		LEDS_DEBUG("%s ADDR = 0x%x, MASK = 0x%x, VAL = 0x%x\n", __func__,
 					 LMU_BL_GET_ADDR(*reg),
 					 LMU_BL_GET_MASK(*reg),
 					 LMU_BL_GET_VAL(*reg));
@@ -784,7 +794,7 @@ static int ti_lmu_backlight_init(struct ti_lmu_bl_chip *chip)
 	regmap_write(regmap, 0x24, 0x02);
 #endif
 
-	pr_err("[bkl] %s finish\n", __func__);
+	LEDS_DEBUG("[bkl] %s finish\n", __func__);
 	return 0;
 }
 
@@ -840,68 +850,68 @@ static ssize_t i2c_reg_dump_show(struct device *dev,
 	int ret_val = 0;
 #if 0
 	regmap_read(regmap, 0x10, &ret_val);
-	pr_err("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1A, &ret_val);
-	pr_err("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1C, &ret_val);
-	pr_err("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x22, &ret_val);
-	pr_err("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x23, &ret_val);
-	pr_err("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x24, &ret_val);
-	pr_err("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x18, &ret_val);
-	pr_err("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x16, &ret_val);
-	pr_err("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
 #else
 	regmap_read(regmap, 0x00, &ret_val);
-	pr_err("[bkl] %s read 0x00 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x00 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x01, &ret_val);
-	pr_err("[bkl] %s read 0x01 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x01 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x10, &ret_val);
-	pr_err("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x10 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x11, &ret_val);
-	pr_err("[bkl] %s read 0x11 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x11 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x12, &ret_val);
-	pr_err("[bkl] %s read 0x12 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x12 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x13, &ret_val);
-	pr_err("[bkl] %s read 0x13 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x13 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x14, &ret_val);
-	pr_err("[bkl] %s read 0x14 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x14 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x15, &ret_val);
-	pr_err("[bkl] %s read 0x15 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x15 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x16, &ret_val);
-	pr_err("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x16 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x17, &ret_val);
-	pr_err("[bkl] %s read 0x17 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x17 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x18, &ret_val);
-	pr_err("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x18 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x19, &ret_val);
-	pr_err("[bkl] %s read 0x19 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x19 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1A, &ret_val);
-	pr_err("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1A = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1B, &ret_val);
-	pr_err("[bkl] %s read 0x1B = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1B = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x1C, &ret_val);
-	pr_err("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x1C = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x20, &ret_val);
-	pr_err("[bkl] %s read 0x20 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x20 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x21, &ret_val);
-	pr_err("[bkl] %s read 0x21 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x21 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x22, &ret_val);
-	pr_err("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x22 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x23, &ret_val);
-	pr_err("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x23 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0x24, &ret_val);
-	pr_err("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0x24 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB0, &ret_val);
-	pr_err("[bkl] %s read 0xB0 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB0 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB2, &ret_val);
-	pr_err("[bkl] %s read 0xB2 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB2 = 0x%x\n", __func__, ret_val);
 	regmap_read(regmap, 0xB4, &ret_val);
-	pr_err("[bkl] %s read 0xB4 = 0x%x\n", __func__, ret_val);
+	LEDS_DEBUG("[bkl] %s read 0xB4 = 0x%x\n", __func__, ret_val);
 #endif
 
 	ret = snprintf(buf, PAGE_SIZE, "reg dump done \n");
@@ -918,7 +928,7 @@ ti_lmu_backlight_register(struct device *dev, struct ti_lmu *lmu,
 	struct ti_lmu_bl *each;
 	int i, ret;
 
-	pr_err("[bkl] %s enter\n", __func__);
+	LEDS_DEBUG("[bkl] %s enter\n", __func__);
 
 	if (!cfg) {
 		dev_err(dev, "Operation is not configured\n");
@@ -979,7 +989,7 @@ ti_lmu_backlight_register(struct device *dev, struct ti_lmu *lmu,
 		dev_err(dev, "failed to create dev_attr_i2c_reg_dump\n");
 	}
 
-	pr_err("[bkl] %s finish\n", __func__);
+	LEDS_DEBUG("[bkl] %s finish\n", __func__);
 
 	return chip;
 }
@@ -1020,7 +1030,7 @@ static int ti_lmu_backlight_probe(struct platform_device *pdev)
 	struct ti_lmu_bl_chip *chip;
 	int ret;
 
-	pr_err("[bkl] %s enter\n", __func__);
+	LEDS_DEBUG("[bkl] %s enter\n", __func__);
 
 	/* set PM439_GPIO4 output ,HIGH and enable */
 	//spmi_register_write(0xC340,0x11);
@@ -1046,7 +1056,7 @@ static int ti_lmu_backlight_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, chip);
-	pr_err("[bkl] %s finish\n", __func__);
+	LEDS_DEBUG("[bkl] %s finish\n", __func__);
 	return 0;
 }
 
