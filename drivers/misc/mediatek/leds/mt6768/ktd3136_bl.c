@@ -26,8 +26,10 @@ int ktd_hbm_mode;
 
 #define KTD_DEBUG
 
- #ifdef KTD_DEBUG
-#define LOG_DBG(fmt, args...) printk(KERN_INFO "[ktd]"fmt"\n", ##args)
+#ifdef KTD_DEBUG
+#define LOG_DBG(format, args...) do { \
+	pr_debug("[ktd]"format"\n", ##args);\
+} while (0)
 #endif
 
 int ktd3137_brightness_table_reg4[256] = {0x01, 0x02, 0x04, 0x04, 0x07,
