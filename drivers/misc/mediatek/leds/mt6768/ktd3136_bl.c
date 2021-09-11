@@ -574,13 +574,13 @@ void ktd3137_brightness_set_workfunc(struct ktd3137_chip *chip, int brightness)
 	} else {
 		if (ktd_hbm_mode == 3) {
 			ktd3137_write_reg(bkl_chip->client, REG_MODE, 0xE1);//27.4mA
-			printk(KERN_INFO "[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
+			LOG_DBG("[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
 		} else if (ktd_hbm_mode == 2) {
 			ktd3137_write_reg(bkl_chip->client, REG_MODE, 0xC9);//25mA
-			printk(KERN_INFO "[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
+			LOG_DBG("[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
 		} else {
 			ktd3137_write_reg(chip->client, REG_MODE, 0xA9);//21.8mA
-			printk(KERN_INFO "[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
+			LOG_DBG("[%s]: ktd_hbm_mode = %d\n", __func__, ktd_hbm_mode);
 		}
 	}
 
@@ -651,7 +651,7 @@ int ktd3137_brightness_set(int brightness)
 #ifdef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	if ((brightness < 5) && (brightness > 2)) {//HQ-61731
 		brightness = 5;
-		printk("%s: lyd_lowest_brightness, brightness = %d", __func__, brightness);
+		LOG_DBG("%s: lyd_lowest_brightness, brightness = %d", __func__, brightness);
 	}
 #endif
 
@@ -1040,7 +1040,7 @@ static int ktd3137_probe(struct i2c_client *client,
 	char *bkl_ptr = (char *)strnstr(saved_command_line, ":bklic=", strlen(saved_command_line));
 	bkl_ptr += strlen(":bklic=");
 	bkl_id = simple_strtol(bkl_ptr, NULL, 10);
-	printk("[%s]: *liuyundong*, ----bkl_id = %d-----\n", __func__, bkl_id);
+	LOG_DBG("[%s]: *liuyundong*, ----bkl_id = %d-----\n", __func__, bkl_id);
 
 	if (bkl_id != 24) {
 		return -ENODEV;
