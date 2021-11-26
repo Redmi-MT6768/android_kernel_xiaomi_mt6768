@@ -639,7 +639,7 @@ static int primary_display_check_recovery_worker_kthread(void *data)
 	struct sched_param param = {.sched_priority = 87 };
 	int ret = 0;
 	int i = 0;
-	int esd_try_cnt = 5; /* 20; */
+	int esd_try_cnt = 1; /* 20; */
 	int recovery_done = 0;
 
 	DISPFUNC();
@@ -690,7 +690,6 @@ static int primary_display_check_recovery_worker_kthread(void *data)
 			DISPERR(
 				"[ESD]LCM recover fail. Try time:%d. Disable esd check\n",
 				esd_try_cnt);
-			primary_display_esd_check_enable(0);
 		} else if (recovery_done == 1) {
 			DISPCHECK("[ESD]esd recovery success\n");
 			recovery_done = 0;
