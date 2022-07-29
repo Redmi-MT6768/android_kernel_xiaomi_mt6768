@@ -469,7 +469,7 @@ config MTK_TIMER
 
 config MTK_TIMER_SYSTIMER
 	bool "Mediatek sys-timer driver" if COMPILE_TEST
-	depends on GENERIC_CLOCKEVENTS && HAS_IOMEM && !MTK_TIEMR
+	depends on GENERIC_CLOCKEVENTS && HAS_IOMEM && !MTK_TIMER
 	select CLKSRC_OF
 	select CLKSRC_MMIO
 	help
@@ -480,7 +480,7 @@ config MTK_TIMER_SYSTIMER
 
 config MTK_TIMER_APXGPT
 	bool "Mediatek timer driver v1" if COMPILE_TEST
-	depends on GENERIC_CLOCKEVENTS && HAS_IOMEM && !MTK_TIEMR
+	depends on GENERIC_CLOCKEVENTS && HAS_IOMEM && !MTK_TIMER
 	select CLKSRC_OF
 	select CLKSRC_MMIO
 	help
